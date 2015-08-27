@@ -1,13 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"strings"
 )
 
-func scrape(url string) string {
-	doc, _ := goquery.NewDocument(url)
+func scrape(url string) (string, error) {
+	doc, err := goquery.NewDocument(url)
+	if err != nil {
+		return "", err
+	}
 	var ret string
 	doc.Find("td").EachWithBreak(func(i int, s *goquery.Selection) bool {
 		if strings.HasPrefix(s.Text(), "\n35") {
@@ -16,7 +18,7 @@ func scrape(url string) string {
 		}
 		return true
 	})
-	return ret
+	return ret, nil
 }
 
 func parse(dump string) (string, string) {
@@ -24,8 +26,12 @@ func parse(dump string) (string, string) {
 	return splits[len(splits)-1], strings.Replace(splits[len(splits)-2], " - ", "", 1)
 }
 
-func main() {
+func getCurrentSong() (string, string, error) {
 	url := "http://www.dogstarradio.com/now_playing.php"
-	song, artist := parse(scrape(url))
-	fmt.Printf("%s - %s", artist, song)
+	dump, err := scrape(url)
+	song, artist := parse(dump)
+	if err != nil {
+		return "", "", err
+	}
+	return song, artist, nil
 }
