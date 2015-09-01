@@ -8,6 +8,7 @@ import (
 func scrape(url string) (string, error) {
 	doc, err := goquery.NewDocument(url)
 	if err != nil {
+		panic(err.Error())
 		return "", err
 	}
 	var ret string
@@ -29,9 +30,9 @@ func parse(dump string) (string, string) {
 func getCurrentSong() (string, string, error) {
 	url := "http://www.dogstarradio.com/now_playing.php"
 	dump, err := scrape(url)
-	song, artist := parse(dump)
 	if err != nil {
 		return "", "", err
 	}
+	song, artist := parse(dump)
 	return song, artist, nil
 }
