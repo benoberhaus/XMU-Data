@@ -6,7 +6,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"io/ioutil"
 	"strings"
-	"time"
 )
 
 // TODO: RETURN ERRORS INSTEAD OF PANICKING
@@ -46,32 +45,11 @@ func getLastPlayedSong(db *sql.DB) (string, string, error) {
 	return song, artist, nil
 }
 
-func main() {
-	conn := getLoginString()
-	db := getDBConn(conn)
-	defer db.Close()
-
-	last_song, last_artist, _ := getLastPlayedSong(db)
-	stmt, err := db.Prepare("insert into xmu2 (song, artist, datetime) VALUES (?, ?, NOW())")
-	if err != nil {
-		panic(err.Error())
-	}
-	for {
-		song, artist, err := getCurrentSong()
-		if err != nil {
-			panic(err.Error())
-		}
-		if last_song != song || last_artist != artist {
-			_, err := stmt.Exec(song, artist)
-			if err != nil {
-				panic(err.Error())
-			}
-			fmt.Printf("Wrote: %s - %s\n", song, artist)
-			last_song, last_artist = song, artist
-			time.Sleep(120 * time.Second)
-		} else {
-			fmt.Printf("Nothing new yet...\n")
-			time.Sleep(30 * time.Second)
+func isJunk(song string, artist string, junk []string) bool {
+	for i, _ := range junk {
+		if strings.Contains(song, junk[i]) || strings.Contains(artist, junk[i]) {
+			return true
 		}
 	}
+	return false
 }
