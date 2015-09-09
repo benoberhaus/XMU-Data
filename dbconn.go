@@ -5,13 +5,16 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"io/ioutil"
+	"os/user"
 	"strings"
 )
 
 // TODO: RETURN ERRORS INSTEAD OF PANICKING
 
 func getLoginString() string {
-	str, err := ioutil.ReadFile("mysql.txt")
+	usr, _ := user.Current()
+	path := usr.HomeDir + "/go/src/benoberhaus/XMU-Data2/mysql.txt"
+	str, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
