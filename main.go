@@ -9,7 +9,7 @@ import (
 func main() {
 
 	// Characters that indicate some between-song promo
-	var junk = []string{"xmu", "@", "#", "p et", "a et"}
+	var junk = []string{"xmu", "@", "#", "p et", "a et", "blog radio", "serious boredom"}
 	// Get and Verify DB Connection
 	conn := getLoginString()
 	db := getDBConn(conn)
