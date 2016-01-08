@@ -1,5 +1,4 @@
-# XMU-Data2
+#XMU-Data
 
-- Complete rewrite of [XMU-Data](https://github.com/benoberhaus/XMU-Data) as a [Meteor](https://github.com/meteor/meteor) app with a [Go](https://github.com/golang/go) backend
-
-- To set up the scraper on your own, there must exist a `mysql.txt` file formatted as `user, password`
+- Collects current song data for Sirius XM U radio station. 
+- Future plans to create visualization of current database of >100,000 entries
